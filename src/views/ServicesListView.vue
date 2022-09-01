@@ -140,8 +140,17 @@
               max-width="270"
             >
               <a :href="service.service_url" target="_blank">
-                <v-img
+                <v-img v-if="service.id==1"
                   src="@/assets/one-logo.png"
+                  height="200px"
+                />
+                <v-img v-if="service.id==2"
+                  src="@/assets/oncef.png"
+                  height="200px"
+                  
+                />
+                <v-img v-if="service.id==3"
+                  src="@/assets/vignette.png"
                   height="200px"
                 />
               </a>
@@ -276,6 +285,15 @@
               >
                 Update
               </v-btn>
+              <v-snackbar
+                v-model="hasUpdated"
+                :timeout="2000"
+                absolute
+                top
+                center
+              >
+                Update effectué
+              </v-snackbar>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -325,6 +343,7 @@ export default {
       dialogUpdate: false,
       dialogDelete: false,
       hasAdded: false,
+      hasUpdated: false,
       service: {
         id: 0,
         title: '',
@@ -336,11 +355,11 @@ export default {
       },
       services: [
         { 
-          id: 1, title: 'test 1', category: 'Eau', description: 'description de desc', 
-          service_url: 'http://google.com', showDescription: false
+          id: 1, title: 'Factures d\'électricité', category: 'Factures', description: 'Vos factures d électricité en ligne', 
+          service_url: 'http://www.one.org.ma/FR/pages/E_Facture.asp', showDescription: false
         }
       ],
-      categories: ['Taxes', 'Eau', 'Electricté', 'Billets']
+      categories: ['Taxes', 'Factures', 'Billets']
     } 
   },
   methods: {
@@ -356,6 +375,7 @@ export default {
     updateService() {
       const index = this.services.findIndex( ser => ser.id === this.service.id);
       this.services[index] = this.service;
+      this.hasUpdated = true;
     },
     deleteService() {
       const index = this.services.findIndex( ser => ser.id === this.service.id);

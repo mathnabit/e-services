@@ -78,6 +78,15 @@
                   >
                     Ajouter
                   </v-btn>
+                  <v-snackbar
+                    v-model="hasAdded"
+                    :timeout="2000"
+                    absolute
+                    top
+                    center
+                  >
+                    Bien ajouté
+                  </v-snackbar>
                 </v-card-actions>
               </v-card>
             </v-dialog>
@@ -170,6 +179,15 @@
           >
             Update
           </v-btn>
+          <v-snackbar
+            v-model="hasUpdated"
+            :timeout="2000"
+            absolute
+            top
+            center
+          >
+            Update effectué
+          </v-snackbar>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -217,13 +235,17 @@ data() {
     dialog: false,
     dialogUpdate: false,
     dialogDelete: false,
+    hasAdded: false,
+    hasUpdated: false,
     category: {
       id: 0,
       title: '',
       description: ''
     },
     categories: [
-      { id: 1, title: 'factures', description: 'some description'}
+      { id: 1, title: 'Factures', description: 'Paiement des factures'},
+      { id: 2, title: 'Taxes', description: 'Paiement des taxes'},
+      { id: 3, title: 'Billets', description: 'Paiement des billets'}
     ],
     headers: [
       {
@@ -246,6 +268,7 @@ methods: {
     this.category.id = this.categories[this.categories.length-1].id + 1;
     this.categories.push(this.category);
     this.category = {};
+    this.hasAdded = true;
   },
   syncCategory(item) {
     console.log(item);
@@ -254,6 +277,7 @@ methods: {
   updateCategory() {
     const index = this.categories.findIndex( cat => cat.id === this.category.id);
     this.categories[index] = this.category;
+    this.hasUpdated = true;
   },
   deleteCategory() {
     const index = this.categories.findIndex( cat => cat.id === this.category.id);

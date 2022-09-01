@@ -18,8 +18,8 @@
         <v-list-item-content>
           <v-list-item-title>
             <v-btn plain>
-            John Leider
-          </v-btn>  
+              Saad Saad
+            </v-btn>  
           </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
@@ -46,7 +46,7 @@
           rounded
           sticky
         >
-          AxA Services <br> 2022-Present
+          AGSA Services <br> 2022 - Present
         </v-banner>
         </div>
       </template>
@@ -55,7 +55,7 @@
     <v-app-bar app clipped-right flat>
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title class="text-uppercase">
-        <span class="font-weight-light">Axa</span>
+        <span class="font-weight-light">AGSA </span>
         <span>Services</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>

@@ -1,50 +1,93 @@
 <template>
   <v-app id="home-page">
-    <v-container fluid class="fill-height">
-      <v-row>
-        <v-col cols="7">
-          <v-main class="mt-12 p-6">
-              <h1>Welcome Back :)</h1>
-              <p>Notre plateforme contient un ensemble de services à fourinir</p>
-              <v-img
-                src="@/assets/e-services.jpg"
-                height="50%"
-              />
-          </v-main>
+    <v-container fluid fill-height  style="padding: 0px">
+      <v-row align="center" justify="center" >
+        <v-col cols="6" class="blue lighten-1" style="border-bottom-right-radius: 300px; height: 720px">
+          <!-- <v-main class="mt-0 p-6">  -->
+            <v-card-text class="white--text" >
+              <h2 class="text-center">Bienvenu chez AGSA SERVICES :)</h2>
+              <h4 class="text-center pt-4">
+                Notre plateforme contient un ensemble de services à fournir<br>  Exploitez vous !
+              </h4>
+            </v-card-text>
+            <v-img 
+              class="mx-auto"
+              alt="Vuetify Logo"
+              src="@/assets/business-management.png"
+              width="500px"
+              height="520px"
+            />
+          <!-- </v-main> -->
         </v-col>
-        <v-col cols="5" id="col-login" >
-          <v-main class="mt-16">
-            
-            <v-card width="400" class="mx-auto mt-2">
-              <v-card-title>
-                <v-img 
+        <v-col cols="6" >
+          <v-main class="mt-0 p-6">  
+            <v-img 
               class="mx-auto"
               alt="Vuetify Logo"
               src="@/assets/logo.png"
-              width="40"
-              height="50"
-            />
+              width="100px"
+              height="100px"
+            />              
+            <v-card width="400" class="mx-auto mt-0" elevation="0">
+              <v-card-title align="center">
+                <h4 class="subtitle-2 grey--text">Se connecter à votre compte</h4>
               </v-card-title>
               <v-card-text>
-                <v-form>
+                <v-form @submit.prevent="login">
                   <v-text-field
-                  label="username"
-                  prepend-icon="mdi-account-circle"
+                    label="email"
+                    outlined
+                    prepend-inner-icon="mdi-account-circle"
+                    v-model="form.email"
                   >
                   </v-text-field>
                   <v-text-field
-                  label="password"
-                  type="password"
-                  prepend-icon="mdi-lock"
+                    label="password"
+                    type="password"
+                    outlined
+                    prepend-inner-icon="mdi-lock"
+                    v-model="form.password"
                   >
                   </v-text-field>
+                  <span class="caption blue--text">Mot de passe oublié !</span>
+                  <v-spacer></v-spacer>
+                  <!-- <router-link to="/dashboard" style="text-decoration: none;"> -->
+                    <v-btn type="submit" color="blue" dark block tile class="mt-4"> 
+                      Se connecter
+                    </v-btn>
+                  <!-- </router-link> -->
                 </v-form>
               </v-card-text>
-              <v-card-actions>
-                <router-link to="/dashboard">
-                  <v-btn color="success">Se connecter</v-btn>
-                </router-link>
-              </v-card-actions>
+            </v-card>
+            <v-card
+              flat
+              class="py-12"
+            >
+              <v-card-text>
+                <v-row
+                  align="center"
+                  justify="center"
+                >
+                  <v-col cols="12">
+                    <p class="text-center">
+                      Suivez nous !
+                    </p>
+                  </v-col>
+                  <v-btn-toggle
+                    rounded
+                  >
+                    <v-btn>
+                      <v-icon color="blue darken-2">mdi-facebook</v-icon>
+                    </v-btn>
+                    <v-btn>
+                      <v-icon color="purple darken-2">mdi-instagram</v-icon>
+                    </v-btn>
+                    <v-btn>
+                      <v-icon color="blue lighten-1">mdi-twitter</v-icon>
+                    </v-btn>
+                  </v-btn-toggle>
+                </v-row>
+              </v-card-text>
             </v-card>
           </v-main>
         </v-col>
@@ -54,8 +97,23 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
-
+  data() {
+    return {
+      form: {
+        email: '',
+        password: ''
+      }
+    }
+  },
+  methods: {
+    async login() {
+      let response = await axios.post('/api/login', this.form);
+      console.log('response');
+      console.log(response);
+    }
+  }
 }
 </script>
 
@@ -65,6 +123,6 @@ export default {
 }
 
 #col-login {
-  background-color: aquamarine;
+  background-color: aliceblue;
 }
 </style>

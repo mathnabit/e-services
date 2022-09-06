@@ -33,11 +33,12 @@
                 <h4 class="subtitle-2 grey--text">Se connecter à votre compte</h4>
               </v-card-title>
               <v-card-text>
-                <v-form>
+                <v-form @submit.prevent="login">
                   <v-text-field
-                    label="username"
+                    label="email"
                     outlined
                     prepend-inner-icon="mdi-account-circle"
+                    v-model="form.email"
                   >
                   </v-text-field>
                   <v-text-field
@@ -45,13 +46,16 @@
                     type="password"
                     outlined
                     prepend-inner-icon="mdi-lock"
+                    v-model="form.password"
                   >
                   </v-text-field>
                   <span class="caption blue--text">Mot de passe oublié !</span>
                   <v-spacer></v-spacer>
-                  <router-link to="/dashboard" style="text-decoration: none;">
-                    <v-btn color="blue" dark block tile class="mt-4">Se connecter</v-btn>
-                  </router-link>
+                  <!-- <router-link to="/dashboard" style="text-decoration: none;"> -->
+                    <v-btn type="submit" color="blue" dark block tile class="mt-4"> 
+                      Se connecter
+                    </v-btn>
+                  <!-- </router-link> -->
                 </v-form>
               </v-card-text>
             </v-card>
@@ -70,7 +74,6 @@
                     </p>
                   </v-col>
                   <v-btn-toggle
-                    v-model="toggle_exclusive"
                     rounded
                   >
                     <v-btn>
@@ -94,8 +97,23 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
-
+  data() {
+    return {
+      form: {
+        email: '',
+        password: ''
+      }
+    }
+  },
+  methods: {
+    async login() {
+      let response = await axios.post('/api/login', this.form);
+      console.log('response');
+      console.log(response);
+    }
+  }
 }
 </script>
 

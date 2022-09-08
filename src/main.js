@@ -15,10 +15,17 @@ axios.defaults.baseURL = "http://localhost:8000";
 // Pour activer la connexion entre l'api et le http client il faut configurer le Cors avec
 axios.defaults.withCredentials = true;
 
-
-new Vue({
-  router,
-  store,
-  vuetify,
-  render: (h) => h(App)
-}).$mount("#app");
+/**
+ * Ici on récupère le token depuis localstorage après chaque actualisation,
+ * et après la création de l'app
+ * On utilise le promise pour attendre la récupération des données avant de créer l'app
+ */
+store.dispatch('attempt', localStorage.getItem('token'))
+.then(() => {
+  new Vue({
+    router,
+    store,
+    vuetify,
+    render: (h) => h(App)
+  }).$mount("#app");
+});

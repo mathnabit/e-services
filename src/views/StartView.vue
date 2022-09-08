@@ -33,7 +33,7 @@
                 <h4 class="subtitle-2 grey--text">Se connecter à votre compte</h4>
               </v-card-title>
               <v-card-text>
-                <v-form @submit.prevent="login">
+                <v-form @submit.prevent="submit">
                   <v-text-field
                     label="email"
                     outlined
@@ -97,7 +97,9 @@
 </template>
 
 <script>
-import axios from 'axios';
+//import axios from 'axios';
+import {mapActions} from 'vuex';
+
 export default {
   data() {
     return {
@@ -108,10 +110,11 @@ export default {
     }
   },
   methods: {
-    async login() {
-      let response = await axios.post('/api/login', this.form);
-      console.log('response');
-      console.log(response);
+    ...mapActions({
+      'login': 'login',
+    }),
+    submit() {
+      this.login(this.form); 
     }
   }
 }

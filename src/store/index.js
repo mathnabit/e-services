@@ -71,11 +71,13 @@ export default new Vuex.Store({
         }
       };
       try {
+        if(token) {
+          commit('setToken', token);
+        } 
         // Pour sortir si le token est null
         if(!state.token)
         return;
-        const response = await axios.get('/api/user', headers);
-        commit('setToken', token);
+        const response = await axios.get('/api/user', headers);      
         commit('setUser', response.data);
         //console.log(response.data.token);
       } catch (error) {
@@ -84,6 +86,31 @@ export default new Vuex.Store({
         commit('setUser', null);
       }
      
+    },
+    /**
+     * On lance d'abord le requete qui tue la session backend,
+     * puis on supprime le token et le user depuis le state et le storage.
+     * En retourne le promise pour l'utiliser dans le NavbarComponent pour
+     * rediriger l'utilisateur à la page login
+     */
+    async logout({ state, commit }) {
+      const headers = {
+        headers :
+        { Authorization: `Bearer ${state.token}`,
+          Accept :'application/json', 
+        }
+      };
+      try {
+        // Attention! Le 2éme paramètre par défaut c'est le body pour les requetes post,
+        // il faut le mentionner, après vient le header qui va contenir le token
+        return await axios.post('/api/logout',{}, headers)
+        .then(() => {
+          commit('setToken', null);
+          commit('setUser', null);
+        });
+      } catch (error) {
+        
+      }
     }
   },
   modules: {},

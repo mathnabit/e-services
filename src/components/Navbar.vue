@@ -60,7 +60,7 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn plain>
-        <span>Log out</span>
+        <span @click="signOut">Log out</span>
         <v-icon right>mdi-export</v-icon>
       </v-btn>
     </v-app-bar>   
@@ -68,6 +68,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 export default {
   data() {
     return {
@@ -79,6 +80,18 @@ export default {
         { title: 'About', icon: 'mdi-information', route: '/dashboard/about' },
 
       ],
+    }
+  }, 
+  methods: {
+    // On récupère l'action logout avec le nom logOut
+    ...mapActions ({
+      'logOut': 'logout'
+    }),
+    // On déclenche l'action récupérée via le méthode signOut qui est
+    // déclenchée en cliquant sur le button LogOut du Navbar, puis on
+    // redirige l'utilisateur vers la page start du login
+    signOut() {
+      this.logOut().then(() => this.$router.push('/'));
     }
   }
 }

@@ -1,5 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import store from "../store";
 import StartView from "../views/StartView.vue";
 import DashboardView from "../views/DashboardView.vue";
 import HomeView from "../views/HomeView.vue";
@@ -39,7 +40,17 @@ const routes = [
         name: "about",
         component: AboutView
       },
-    ]
+    ],
+    // On protège la route /dashboard si l'authentification n'est pas effectuée
+    beforeEnter: (to, from, next) => {
+      if(!store.getters.authenticated) {
+        console.log('sir tl3b');
+        // le redirige vers la page start de login
+        return next({name: 'start'});
+      }
+      // le laisse passer
+      next();
+    }
   },  
 ];
 

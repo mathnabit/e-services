@@ -17,6 +17,7 @@ export default new Vuex.Store({
   },
   getters: {
     // Auth
+    // Pour tester l'athentification
     authenticated(state) {
       return state.user && state.token;
     },

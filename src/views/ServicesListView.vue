@@ -18,7 +18,7 @@
           <v-col>
             <v-autocomplete
               v-model="filterKeyword"
-              :items="categories"
+              :items="titleCategories"
               label="Catégories"
               filled
               rounded
@@ -85,7 +85,7 @@
                       <v-col>
                         <v-autocomplete
                           v-model="service.category"
-                          :items="categories"
+                          :items="titleCategories"
                           label="Catégories*"
                         ></v-autocomplete>
                       </v-col>
@@ -161,7 +161,7 @@
                   outlined
                   color="blue"
                 >
-                {{ service.category }} 
+                {{ categories.find(c => c.id === service.category_id).title }} 
                 </v-chip>
               </v-card-subtitle>   
               <v-card-actions class="justify-center">
@@ -333,6 +333,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 export default {
   data() {
     return {
@@ -353,16 +354,20 @@ export default {
         image_url: [],
         showDescription: false
       },
-      services: [
-        { 
-          id: 1, title: 'Factures d\'électricité', category: 'Factures', description: 'Vos factures d électricité en ligne', 
-          service_url: 'http://www.one.org.ma/FR/pages/E_Facture.asp', showDescription: false
-        }
-      ],
-      categories: ['Taxes', 'Factures', 'Billets']
+      services: [],
+      categories: []
     } 
   },
+  mounted() {
+    console.log('mounted is here');
+    this.allServices();
+    this.allCategories();
+  },
   methods: {
+    ...mapActions({
+      allServices: 'allServices',
+      allCategories: 'allCategories',
+    }),
     addService() {
       this.service.id = this.services[this.services.length-1].id + 1;
       this.services.push(this.service);
@@ -395,6 +400,15 @@ export default {
     }
   },
   computed: {
+    getServices() {
+      this.services = this.$store.getters.getServices;
+    },
+    getCategories() {
+      this.categories = this.$store.getters.getCategories;
+    },
+    titleCategories() {
+      return this.categories.map(c => c.title);
+    },
     keywords() {
       if (!this.search) return []
       const keywords = [];

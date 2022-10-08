@@ -15,7 +15,7 @@ axios.defaults.baseURL = "http://localhost:8000";
 // Pour activer la connexion entre l'api et le http client il faut configurer le Cors avec
 axios.defaults.withCredentials = true;
 
-/**
+/*
  * Ici on récupère le token depuis localstorage après chaque actualisation,
  * et après la création de l'app
  * On utilise le promise pour attendre la récupération des données avant de créer l'app

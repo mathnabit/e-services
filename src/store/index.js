@@ -7,34 +7,55 @@ import router from '../router/index.js';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state: {
-    /**
-     * Auth
-     * Pour le state d'auth on a le token et le user
-     */
+  state: { 
+    /* ------ Auth -----*/
     token: null,
-    user: null
+    user: null,
+
+    /* ------ Services -----*/
+    services: [],
+
+    /* ------ Categories -----*/
+    categories: []
   },
   getters: {
-    // Auth
+    /* ------ Auth -----*/
     // Pour tester l'athentification
     authenticated(state) {
       return state.user && state.token;
     },
     getUser(state) {
       return state.user;
+    },
+
+    /* ------ Services -----*/
+    getServices(state) {
+      return state.services;
+    },
+
+    /* ------ Categories -----*/
+    getCategories(state) {
+      return state.categories;
     }
   },
   mutations: {
-    /**
-     * Auth
-     * On a une mutaion pour modifier le token et autre pour le user
-     */
+    /* ------ Auth -----*/
+    // On a une mutaion pour modifier le token et autre pour le user
     setToken(state, token) {
       state.token = token;
     },
     setUser(state, user) {
       state.user = user;
+    },
+
+    /* ------ Services -----*/
+    setServices(state, services) {
+      state.services = services;
+    },
+
+    /* ------ Categories -----*/
+    setCategories(state, categories) {
+      state.categories = categories;
     }
   },
   actions: {
@@ -56,7 +77,7 @@ export default new Vuex.Store({
         });
   
       } catch (error) {
-        console.log(error);
+        alert('Données non valides!');
       }
     },
     /**
@@ -70,6 +91,7 @@ export default new Vuex.Store({
           Accept :'application/json', 
         }
       };
+      console.log('je suis attempt');
       try {
         if(token) {
           commit('setToken', token);
@@ -110,6 +132,40 @@ export default new Vuex.Store({
         });
       } catch (error) {
         
+      }
+    },
+
+    /* ------ Services -----*/
+    async allServices({ state, commit }) {
+      console.log('ici allServices, token : '+state.token);
+      const headers = {
+        headers :
+        { Authorization: `Bearer ${state.token}`,
+          Accept :'application/json', 
+        }
+      };
+      try {
+        const response = await axios.get('/api/services', headers);
+        commit('setServices', response.data);
+      } catch (error) {
+        console.log('error on getting services!');
+      }
+    },
+
+    /* ------ Categories -----*/
+    async allCategories({ state, commit }) {
+      console.log('ici allCategories, token : '+state.token);
+      const headers = {
+        headers :
+        { Authorization: `Bearer ${state.token}`,
+          Accept :'application/json', 
+        }
+      };
+      try {
+        const response = await axios.get('/api/categories', headers);
+        commit('setCategories', response.data);
+      } catch (error) {
+        console.log('error on getting categories!');
       }
     }
   },

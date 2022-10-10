@@ -18,7 +18,9 @@
           <v-col>
             <v-autocomplete
               v-model="filterKeyword"
-              :items="titleCategories"
+              :items="categories"
+              item-text="title"
+              item-value="id"
               label="Catégories"
               filled
               rounded
@@ -49,83 +51,90 @@
                   Service
                 </v-btn>
               </template>
-              <v-card>
-                <v-card-title>
-                  <span class="text-h5">Nouvelle Service</span>
-                </v-card-title>
-                <v-card-text>
-                  <v-container>
-                    <v-row>
-                      <v-col>
-                        <v-text-field
-                          v-model="service.title"
-                          label="Libelle*"
-                          required
-                        ></v-text-field>
-                      </v-col>
-                    </v-row>
-                    <v-row> 
-                      <v-col>
-                        <v-text-field
-                          v-model="service.service_url"
-                          label="Lien*"
-                          required
-                        ></v-text-field>
-                      </v-col>
-                    </v-row>
-                    <v-row>
-                      <v-col>
-                        <v-text-field
-                          v-model="service.description"
-                          label="Description"
-                        ></v-text-field>
-                      </v-col>
-                    </v-row>
-                    <v-row>
-                      <v-col>
-                        <v-autocomplete
-                          v-model="service.category"
-                          :items="titleCategories"
-                          label="Catégories*"
-                        ></v-autocomplete>
-                      </v-col>
-                      <v-col>
-                        <v-file-input 
-                          v-model="service.image_url"
-                          truncate-length="15"
-                        ></v-file-input> 
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                  <small>* Champs requis</small>
-                </v-card-text>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn
-                    color="blue darken-1"
-                    text
-                    @click="dialog = false"
+              <form @submit.prevent="submitAdd" enctype="multipart/form-data">
+                <v-card>
+                  <v-card-title>
+                    <span class="text-h5">Nouvelle Service</span>
+                  </v-card-title>
+                  <v-card-text>
+                    <v-container>
+                      <v-row>
+                        <v-col>
+                          <v-text-field
+                            v-model="service.title"
+                            label="Libelle*"
+                            required
+                          ></v-text-field>
+                        </v-col>
+                      </v-row>
+                      <v-row> 
+                        <v-col>
+                          <v-text-field
+                            v-model="service.service_url"
+                            label="Lien*"
+                            required
+                          ></v-text-field>
+                        </v-col>
+                      </v-row>
+                      <v-row>
+                        <v-col>
+                          <v-text-field
+                            v-model="service.description"
+                            label="Description"
+                          ></v-text-field>
+                        </v-col>
+                      </v-row>
+                      <v-row>
+                        <v-col>
+                          <v-autocomplete
+                            v-model="service.category_id"
+                            :items="categories"
+                            item-text="title"
+                            item-value="id"
+                            label="Catégories*"
+                          ></v-autocomplete>
+                        </v-col>
+                        <v-col>
+                          <v-file-input 
+                            type="file"
+                            v-model="photo"
+                            @change="onChange"
+                            accept="image/*"
+                            truncate-length="15"
+                          ></v-file-input> 
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                    <small>* Champs requis</small>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      color="blue darken-1"
+                      text
+                      @click="dialog = false"
+                    >
+                      Fermer
+                    </v-btn>
+                    <v-btn
+                      color="blue darken-1"
+                      text
+                      type="submit"
+                    >
+                      Ajouter
+                    </v-btn>
+                  </v-card-actions>
+                  <v-snackbar
+                    v-model="hasAdded"
+                    :timeout="2000"
+                    absolute
+                    top
+                    center
                   >
-                    Fermer
-                  </v-btn>
-                  <v-btn
-                    color="blue darken-1"
-                    text
-                    @click="addService"
-                  >
-                    Ajouter
-                  </v-btn>
-                </v-card-actions>
-                <v-snackbar
-                  v-model="hasAdded"
-                  :timeout="2000"
-                  absolute
-                  top
-                  center
-                >
-                  Bien ajouté
-                </v-snackbar>
-              </v-card>
+                    Bien ajouté
+                  </v-snackbar>
+                </v-card>
+              </form>
             </v-dialog>
           </v-col>
         </v-row>  
@@ -140,17 +149,8 @@
               max-width="270"
             >
               <a :href="service.service_url" target="_blank">
-                <v-img v-if="service.id==1"
-                  src="@/assets/one-logo.png"
-                  height="200px"
-                />
-                <v-img v-if="service.id==2"
-                  src="@/assets/oncef.png"
-                  height="200px"
-                  
-                />
-                <v-img v-if="service.id==3"
-                  src="@/assets/vignette.png"
+                <v-img
+                  :src="service.image_url"
                   height="200px"
                 />
               </a>
@@ -262,7 +262,9 @@
                   </v-col>
                   <v-col>
                     <v-file-input 
-                      v-model="service.image_url"
+                      type="file"
+                      v-model="photo"
+                      accept="image/*"
                       truncate-length="15"
                     ></v-file-input> 
                   </v-col>
@@ -348,12 +350,13 @@ export default {
       service: {
         id: 0,
         title: '',
-        category: '',
+        category_id: 0,
         description: '',
         service_url: '',
-        image_url: [],
+        image_url: '',
         showDescription: false
       },
+      photo: null,
       services: [],
       categories: []
     } 
@@ -367,10 +370,27 @@ export default {
     ...mapActions({
       allServices: 'allServices',
       allCategories: 'allCategories',
+      addService: 'addService',
     }),
-    addService() {
-      this.service.id = this.services[this.services.length-1].id + 1;
-      this.services.push(this.service);
+    onChange() {
+      //console.log('from onChange'+this.photo);
+    },
+    submitAdd() {
+      let formData = new FormData();
+      if (this.photo) {
+        formData.append('photo', this.photo, this.photo.name);
+      } else {
+        formData = null;
+      }
+      let payload = JSON.stringify({
+        title: this.service.title,
+        description: this.service.description,
+        service_url: this.service.service_url,
+        category_id: this.service.category_id
+      });
+      formData.append('service', payload);
+
+      this.addService(formData);
       this.hasAdded = true;
       this.resetService();
     },
@@ -391,10 +411,10 @@ export default {
       this.service = {
         id: 0,
         title: '',
-        category: '',
+        category_id: 0,
         description: '',
         service_url: '',
-        image_url: [],
+        image_url: '',
         showDescription: false
       }
     }
@@ -405,9 +425,6 @@ export default {
     },
     getCategories() {
       this.categories = this.$store.getters.getCategories;
-    },
-    titleCategories() {
-      return this.categories.map(c => c.title);
     },
     keywords() {
       if (!this.search) return []
@@ -428,7 +445,7 @@ export default {
     filtering() {
       if (!this.filterKeyword) return this.services;
       return this.services.filter(service => {
-        return service.category.toLowerCase() == this.filterKeyword.toLowerCase();
+        return this.categories.find(c => c.id === service.category_id).title.toLowerCase() == this.filterKeyword.toLowerCase();
       })
     }
   },

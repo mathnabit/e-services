@@ -111,7 +111,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      'login': 'login',
+      login: 'login',
     }),
     submit() {
       this.login(this.form); 

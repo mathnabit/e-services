@@ -52,6 +52,9 @@ export default new Vuex.Store({
     setServices(state, services) {
       state.services = services;
     },
+    addService(state, service) {
+      state.services.push(service);
+    },
 
     /* ------ Categories -----*/
     setCategories(state, categories) {
@@ -136,6 +139,7 @@ export default new Vuex.Store({
     },
 
     /* ------ Services -----*/
+    // Get all services 
     async allServices({ state, commit }) {
       console.log('ici allServices, token : '+state.token);
       const headers = {
@@ -149,6 +153,25 @@ export default new Vuex.Store({
         commit('setServices', response.data);
       } catch (error) {
         console.log('error on getting services!');
+      }
+    },
+    // add service
+    addService({ state, commit }, payload) {
+      const headers = {
+        headers :
+        { Authorization: `Bearer ${state.token}`,
+          Accept :'application/json', 
+        }
+      };
+      console.log(payload);
+      try {
+        axios.post('/api/services',payload, headers)
+        .then((response) => {
+          console.log("Service Added Successfully!");
+          commit('addService', response.data);
+        });
+      } catch (error) {
+        console.log({ error });
       }
     },
 

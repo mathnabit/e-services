@@ -63,6 +63,10 @@ export default new Vuex.Store({
       state.services[index].image_url = service.image_url;
       state.services[index].category_id = service.category_id;
     },
+    deleteService(state, id) {
+      const index = state.services.findIndex( ser => ser.id === id);
+      state.services.splice(index, 1);
+    },
 
     /* ------ Categories -----*/
     setCategories(state, categories) {
@@ -200,7 +204,26 @@ export default new Vuex.Store({
       } catch (error) {
         console.log({ error });
       }
-    },
+    }, 
+    // delete service
+    deleteService({ state, commit }, id) {
+      const headers = {
+        headers :
+        { Authorization: `Bearer ${state.token}`,
+          Accept :'application/json', 
+        }
+      };
+
+      try {
+        axios.delete('/api/services/'+id, headers)
+        .then((response) => {
+          console.log("Service Deleted Successfully!");
+          commit('deleteService', id);
+        });
+      } catch (error) {
+        console.log({ error });
+      }
+    }, 
 
     /* ------ Categories -----*/
     async allCategories({ state, commit }) {

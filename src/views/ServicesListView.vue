@@ -327,7 +327,7 @@
               <v-btn
                 color="green darken-1"
                 text
-                @click="deleteService"
+                @click="submitDelete"
               >
                 OK
               </v-btn>
@@ -376,6 +376,7 @@ export default {
       allCategories: 'allCategories',
       addService: 'addService',
       updateService: 'updateService',
+      deleteService: 'deleteService',
     }),
     onChange() {
       //console.log('from onChange'+this.photo);
@@ -417,9 +418,8 @@ export default {
       this.updateService(formData);
       this.hasUpdated = true;
     },
-    deleteService() {
-      const index = this.services.findIndex( ser => ser.id === this.service.id);
-      this.services.splice(index, 1);
+    submitDelete() {
+      this.deleteService(this.service.id);
       this.dialogDelete = false;
     },
     resetService() {

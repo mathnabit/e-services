@@ -221,6 +221,7 @@
           max-width="600px"
         >              
           <v-card>
+            <form @submit.prevent="submitUpdate" enctype="multipart/form-data">
             <v-card-title>
               <span class="text-h5">Update Service</span>
             </v-card-title>
@@ -255,8 +256,10 @@
                 <v-row>
                   <v-col>
                     <v-autocomplete
-                      v-model="service.category"
+                      v-model="service.category_id"
                       :items="categories"
+                      item-text="title"
+                      item-value="id"
                       label="Catégories*"
                     ></v-autocomplete>
                   </v-col>
@@ -283,7 +286,7 @@
               <v-btn
                 color="blue darken-1"
                 text
-                @click="updateService"
+                type="submit"
               >
                 Update
               </v-btn>
@@ -297,6 +300,7 @@
                 Update effectué
               </v-snackbar>
             </v-card-actions>
+            </form>
           </v-card>
         </v-dialog>
         <!-- Delete Service Modal -->
@@ -361,7 +365,7 @@ export default {
       categories: []
     } 
   },
-  mounted() {
+  created() {
     console.log('mounted is here');
     this.allServices();
     this.allCategories();
@@ -371,6 +375,7 @@ export default {
       allServices: 'allServices',
       allCategories: 'allCategories',
       addService: 'addService',
+      updateService: 'updateService',
     }),
     onChange() {
       //console.log('from onChange'+this.photo);
@@ -379,9 +384,7 @@ export default {
       let formData = new FormData();
       if (this.photo) {
         formData.append('photo', this.photo, this.photo.name);
-      } else {
-        formData = null;
-      }
+      } 
       let payload = JSON.stringify({
         title: this.service.title,
         description: this.service.description,
@@ -393,13 +396,25 @@ export default {
       this.addService(formData);
       this.hasAdded = true;
       this.resetService();
+      
     },
     syncService(service) {
       this.service = service;
     },
-    updateService() {
-      const index = this.services.findIndex( ser => ser.id === this.service.id);
-      this.services[index] = this.service;
+    submitUpdate() {
+      let formData = new FormData();
+      if (this.photo) {
+        formData.append('photo', this.photo, this.photo.name);
+      } 
+      let payload = JSON.stringify({
+        id: this.service.id,
+        title: this.service.title,
+        description: this.service.description,
+        service_url: this.service.service_url,
+        category_id: this.service.category_id
+      });
+      formData.append('service', payload);
+      this.updateService(formData);
       this.hasUpdated = true;
     },
     deleteService() {
@@ -416,7 +431,8 @@ export default {
         service_url: '',
         image_url: '',
         showDescription: false
-      }
+      };
+      this.photo = null;
     }
   },
   computed: {

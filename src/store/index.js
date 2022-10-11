@@ -55,6 +55,14 @@ export default new Vuex.Store({
     addService(state, service) {
       state.services.push(service);
     },
+    updateService(state, service) {
+      const index = state.services.findIndex( ser => ser.id === service.id);
+      state.services[index].title = service.title;
+      state.services[index].description = service.description;
+      state.services[index].service_url = service.service_url;
+      state.services[index].image_url = service.image_url;
+      state.services[index].category_id = service.category_id;
+    },
 
     /* ------ Categories -----*/
     setCategories(state, categories) {
@@ -169,6 +177,25 @@ export default new Vuex.Store({
         .then((response) => {
           console.log("Service Added Successfully!");
           commit('addService', response.data);
+        });
+      } catch (error) {
+        console.log({ error });
+      }
+    },
+    // update service
+    updateService({ state, commit }, payload) {
+      const headers = {
+        headers :
+        { Authorization: `Bearer ${state.token}`,
+          Accept :'application/json', 
+        }
+      };
+      //console.log(payload);
+      try {
+        axios.post('/api/services/update',payload, headers)
+        .then((response) => {
+          console.log("Service Updated Successfully!"+response.data);
+          commit('updateService', response.data);
         });
       } catch (error) {
         console.log({ error });

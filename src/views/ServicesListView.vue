@@ -366,7 +366,7 @@ export default {
     } 
   },
   created() {
-    console.log('mounted is here');
+    console.log('created is here');
     this.allServices();
     this.allCategories();
   },

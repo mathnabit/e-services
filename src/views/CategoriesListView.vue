@@ -141,6 +141,7 @@
       max-width="500px"
     >
       <v-card>
+        <form @submit.prevent="submitUpdate">
         <v-card-title>
           <span class="text-h5">Update Catégorie</span>
         </v-card-title>
@@ -177,7 +178,7 @@
           <v-btn
             color="blue darken-1"
             text
-            @click="updateCategory"
+            type="submit"
           >
             Update
           </v-btn>
@@ -191,6 +192,7 @@
             Update effectué
           </v-snackbar>
         </v-card-actions>
+        </form>
       </v-card>
     </v-dialog>
     <!-- Delete Category Modal -->

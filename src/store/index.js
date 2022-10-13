@@ -75,14 +75,11 @@ export default new Vuex.Store({
     addCategory(state, category) {
       state.categories.push(category);
     },
-    // updateCategory(state, service) {
-    //   const index = state.services.findIndex( ser => ser.id === service.id);
-    //   state.services[index].title = service.title;
-    //   state.services[index].description = service.description;
-    //   state.services[index].service_url = service.service_url;
-    //   state.services[index].image_url = service.image_url;
-    //   state.services[index].category_id = service.category_id;
-    // },
+    updateCategory(state, category) {
+      const index = state.categories.findIndex( cat => cat.id === category.id);
+      state.categories[index].title = category.title;
+      state.categories[index].description = category.description;
+    },
     // deleteCategory(state, id) {
     //   const index = state.services.findIndex( ser => ser.id === id);
     //   state.services.splice(index, 1);
@@ -270,6 +267,24 @@ export default new Vuex.Store({
         .then((response) => {
           console.log("Category Added Successfully!");
           commit('addCategory', response.data);
+        });
+      } catch (error) {
+        console.log({ error });
+      }
+    },
+    // update category
+    updateCategory({ state, commit }, category) {
+      const headers = {
+        headers :
+        { Authorization: `Bearer ${state.token}`,
+          Accept :'application/json', 
+        }
+      };
+      try {
+        axios.put('/api/categories/'+category.id, category, headers)
+        .then((response) => {
+          console.log("Category Added Successfully!");
+          commit('updateCategory', response.data);
         });
       } catch (error) {
         console.log({ error });

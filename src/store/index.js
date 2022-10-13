@@ -71,7 +71,19 @@ export default new Vuex.Store({
     /* ------ Categories -----*/
     setCategories(state, categories) {
       state.categories = categories;
-    }
+    },
+    addCategory(state, category) {
+      state.categories.push(category);
+    },
+    updateCategory(state, category) {
+      const index = state.categories.findIndex( cat => cat.id === category.id);
+      state.categories[index].title = category.title;
+      state.categories[index].description = category.description;
+    },
+    deleteCategory(state, id) {
+      const index = state.categories.findIndex( cat => cat.id === id);
+      state.categories.splice(index, 1);
+    },
   },
   actions: {
     /* ------ Auth -----*/
@@ -226,6 +238,7 @@ export default new Vuex.Store({
     }, 
 
     /* ------ Categories -----*/
+    // all categories
     async allCategories({ state, commit }) {
       console.log('ici allCategories, token : '+state.token);
       const headers = {
@@ -240,7 +253,62 @@ export default new Vuex.Store({
       } catch (error) {
         console.log('error on getting categories!');
       }
-    }
+    },
+    // add category
+    addCategory({ state, commit }, category) {
+      const headers = {
+        headers :
+        { Authorization: `Bearer ${state.token}`,
+          Accept :'application/json', 
+        }
+      };
+      try {
+        axios.post('/api/categories', category, headers)
+        .then((response) => {
+          console.log("Category Added Successfully!");
+          commit('addCategory', response.data);
+        });
+      } catch (error) {
+        console.log({ error });
+      }
+    },
+    // update category
+    updateCategory({ state, commit }, category) {
+      const headers = {
+        headers :
+        { Authorization: `Bearer ${state.token}`,
+          Accept :'application/json', 
+        }
+      };
+      try {
+        axios.put('/api/categories/'+category.id, category, headers)
+        .then((response) => {
+          console.log("Category Added Successfully!");
+          commit('updateCategory', response.data);
+        });
+      } catch (error) {
+        console.log({ error });
+      }
+    },
+    // delete category
+    deleteCategory({ state, commit }, id) {
+      const headers = {
+        headers :
+        { Authorization: `Bearer ${state.token}`,
+          Accept :'application/json', 
+        }
+      };
+
+      try {
+        axios.delete('/api/categories/'+id, headers)
+        .then((response) => {
+          console.log("Category Deleted Successfully!");
+          commit('deleteCategory', id);
+        });
+      } catch (error) {
+        console.log({ error });
+      }
+    }, 
   },
   modules: {},
 });

@@ -37,6 +37,7 @@
                 </v-btn>
               </template>
               <v-card>
+                <form @submit.prevent="submitAdd">
                 <v-card-title>
                   <span class="text-h5">Nouvelle Catégorie</span>
                 </v-card-title>
@@ -74,7 +75,7 @@
                   <v-btn
                     color="blue darken-1"
                     text
-                    @click="addCategory"
+                    type="submit"
                   >
                     Ajouter
                   </v-btn>
@@ -88,6 +89,7 @@
                     Bien ajouté
                   </v-snackbar>
                 </v-card-actions>
+                </form>
               </v-card>
             </v-dialog>
           </v-col>
@@ -139,6 +141,7 @@
       max-width="500px"
     >
       <v-card>
+        <form @submit.prevent="submitUpdate">
         <v-card-title>
           <span class="text-h5">Update Catégorie</span>
         </v-card-title>
@@ -175,7 +178,7 @@
           <v-btn
             color="blue darken-1"
             text
-            @click="updateCategory"
+            type="submit"
           >
             Update
           </v-btn>
@@ -189,6 +192,7 @@
             Update effectué
           </v-snackbar>
         </v-card-actions>
+        </form>
       </v-card>
     </v-dialog>
     <!-- Delete Category Modal -->
@@ -215,7 +219,7 @@
           <v-btn
             color="green darken-1"
             text
-            @click="deleteCategory"
+            @click="submitDelete"
           >
             OK
           </v-btn>
@@ -228,6 +232,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 export default {
 data() {
   return {
@@ -243,9 +248,9 @@ data() {
       description: ''
     },
     categories: [
-      { id: 1, title: 'Factures', description: 'Paiement des factures'},
-      { id: 2, title: 'Taxes', description: 'Paiement des taxes'},
-      { id: 3, title: 'Billets', description: 'Paiement des billets'}
+      // { id: 1, title: 'Factures', description: 'Paiement des factures'},
+      // { id: 2, title: 'Taxes', description: 'Paiement des taxes'},
+      // { id: 3, title: 'Billets', description: 'Paiement des billets'}
     ],
     headers: [
       {
@@ -263,10 +268,19 @@ data() {
     itemsPerPage: 10,  
   }
 },
+created() {
+  console.log('created is here');
+  this.allCategories();
+},
 methods: {
-  addCategory() {
-    this.category.id = this.categories[this.categories.length-1].id + 1;
-    this.categories.push(this.category);
+  ...mapActions({
+    allCategories: 'allCategories',
+    addCategory: 'addCategory',
+    updateCategory: 'updateCategory',
+    deleteCategory: 'deleteCategory',
+  }),
+  submitAdd() {
+    this.addCategory(this.category);
     this.category = {};
     this.hasAdded = true;
   },
@@ -274,18 +288,19 @@ methods: {
     console.log(item);
     this.category = item;
   },
-  updateCategory() {
-    const index = this.categories.findIndex( cat => cat.id === this.category.id);
-    this.categories[index] = this.category;
+  submitUpdate() {
+    this.updateCategory(this.category);
     this.hasUpdated = true;
   },
-  deleteCategory() {
-    const index = this.categories.findIndex( cat => cat.id === this.category.id);
-    this.categories.splice(index, 1);
+  submitDelete() {
+    this.deleteCategory(this.category.id);
     this.dialogDelete = false;
   }
 },
 computed: {
+  getCategories() {
+      this.categories = this.$store.getters.getCategories;
+    },
     keywords() {
       if (!this.search) return [];
       const keywords = [];

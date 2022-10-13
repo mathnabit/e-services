@@ -80,10 +80,10 @@ export default new Vuex.Store({
       state.categories[index].title = category.title;
       state.categories[index].description = category.description;
     },
-    // deleteCategory(state, id) {
-    //   const index = state.services.findIndex( ser => ser.id === id);
-    //   state.services.splice(index, 1);
-    // },
+    deleteCategory(state, id) {
+      const index = state.categories.findIndex( cat => cat.id === id);
+      state.categories.splice(index, 1);
+    },
   },
   actions: {
     /* ------ Auth -----*/
@@ -290,6 +290,25 @@ export default new Vuex.Store({
         console.log({ error });
       }
     },
+    // delete category
+    deleteCategory({ state, commit }, id) {
+      const headers = {
+        headers :
+        { Authorization: `Bearer ${state.token}`,
+          Accept :'application/json', 
+        }
+      };
+
+      try {
+        axios.delete('/api/categories/'+id, headers)
+        .then((response) => {
+          console.log("Category Deleted Successfully!");
+          commit('deleteCategory', id);
+        });
+      } catch (error) {
+        console.log({ error });
+      }
+    }, 
   },
   modules: {},
 });

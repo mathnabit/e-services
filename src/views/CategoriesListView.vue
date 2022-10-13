@@ -219,7 +219,7 @@
           <v-btn
             color="green darken-1"
             text
-            @click="deleteCategory"
+            @click="submitDelete"
           >
             OK
           </v-btn>
@@ -293,7 +293,7 @@ methods: {
     this.hasUpdated = true;
   },
   submitDelete() {
-    this.deleteService(this.service.id);
+    this.deleteCategory(this.category.id);
     this.dialogDelete = false;
   }
 },

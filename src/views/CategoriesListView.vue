@@ -37,6 +37,7 @@
                 </v-btn>
               </template>
               <v-card>
+                <form @submit.prevent="submitAdd">
                 <v-card-title>
                   <span class="text-h5">Nouvelle Catégorie</span>
                 </v-card-title>
@@ -74,7 +75,7 @@
                   <v-btn
                     color="blue darken-1"
                     text
-                    @click="addCategory"
+                    type="submit"
                   >
                     Ajouter
                   </v-btn>
@@ -88,6 +89,7 @@
                     Bien ajouté
                   </v-snackbar>
                 </v-card-actions>
+                </form>
               </v-card>
             </v-dialog>
           </v-col>

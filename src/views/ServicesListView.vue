@@ -465,7 +465,7 @@ export default {
     filtering() {
       if (!this.filterKeyword) return this.getServices;
       return this.getServices.filter(service => {
-        return this.getCategories.find(c => c.id === service.category_id).title.toLowerCase() == this.filterKeyword.toLowerCase();
+        return this.getCategories.find(c => c.id === service.category_id).id == this.filterKeyword;
       })
     }
   },

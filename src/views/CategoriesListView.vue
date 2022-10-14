@@ -247,11 +247,8 @@ data() {
       title: '',
       description: ''
     },
-    categories: [
-      // { id: 1, title: 'Factures', description: 'Paiement des factures'},
-      // { id: 2, title: 'Taxes', description: 'Paiement des taxes'},
-      // { id: 3, title: 'Billets', description: 'Paiement des billets'}
-    ],
+    // C'est mieux d'utiliser le computed getCategories directement pour le declencher auto.
+    //categories: [],
     headers: [
       {
         text: 'Id',
@@ -271,6 +268,7 @@ data() {
 created() {
   console.log('created is here');
   this.allCategories();
+  this.getCategories;
 },
 methods: {
   ...mapActions({
@@ -299,24 +297,24 @@ methods: {
 },
 computed: {
   getCategories() {
-      this.categories = this.$store.getters.getCategories;
-    },
-    keywords() {
-      if (!this.search) return [];
-      const keywords = [];
-      for (const search of this.searching) {
-        keywords.push(search.keyword);
-      }
-      return keywords
-    },
-    searching() {
-      if (!this.search) return this.categories;
-      const search = this.search.toLowerCase();
-      return this.categories.filter(category => {
-        const text = category.title.toLowerCase();
-        return text.indexOf(search) > -1;
-      })
-    },
+    return this.$store.getters.getCategories;
+  },
+  keywords() {
+    if (!this.search) return [];
+    const keywords = [];
+    for (const search of this.searching) {
+      keywords.push(search.keyword);
+    }
+    return keywords
+  },
+  searching() {
+    if (!this.search) return this.getCategories;
+    const search = this.search.toLowerCase();
+    return this.getCategories.filter(category => {
+      const text = category.title.toLowerCase();
+      return text.indexOf(search) > -1;
+    })
+  },
   },
 }
 </script>

@@ -18,7 +18,7 @@
           <v-col>
             <v-autocomplete
               v-model="filterKeyword"
-              :items="categories"
+              :items="getCategories"
               item-text="title"
               item-value="id"
               label="Catégories"
@@ -88,7 +88,7 @@
                         <v-col>
                           <v-autocomplete
                             v-model="service.category_id"
-                            :items="categories"
+                            :items="getCategories"
                             item-text="title"
                             item-value="id"
                             label="Catégories*"
@@ -147,6 +147,7 @@
             <v-card
               class="mx-auto"
               max-width="270"
+              v-if="service"
             >
               <a :href="service.service_url" target="_blank">
                 <v-img
@@ -161,7 +162,7 @@
                   outlined
                   color="blue"
                 >
-                {{ categories.find(c => c.id === service.category_id).title }} 
+                {{ getCategories.find(c => c.id === service.category_id) ? getCategories.find(c => c.id === service.category_id).title : '' }} 
                 </v-chip>
               </v-card-subtitle>   
               <v-card-actions class="justify-center">
@@ -208,7 +209,7 @@
         <v-row>
           <v-col>
             <v-pagination
-              v-show="this.services.length >= 8"
+              v-show="getServices.length >= 8"
               :length="2"
             ></v-pagination>
           </v-col>
@@ -257,7 +258,7 @@
                   <v-col>
                     <v-autocomplete
                       v-model="service.category_id"
-                      :items="categories"
+                      :items="getCategories"
                       item-text="title"
                       item-value="id"
                       label="Catégories*"
@@ -361,8 +362,9 @@ export default {
         showDescription: false
       },
       photo: null,
-      services: [],
-      categories: []
+      // Using getServices and getCategories instead to trigger computed reactivity
+      // services: [],
+      // categories: []
     } 
   },
   created() {
@@ -437,10 +439,12 @@ export default {
   },
   computed: {
     getServices() {
-      this.services = this.$store.getters.getServices;
+      //this.services = this.$store.getters.getServices;
+      return this.$store.getters.getServices;
     },
     getCategories() {
-      this.categories = this.$store.getters.getCategories;
+      //this.categories = this.$store.getters.getCategories;
+      return this.$store.getters.getCategories;
     },
     keywords() {
       if (!this.search) return []
@@ -459,9 +463,9 @@ export default {
       });
     },
     filtering() {
-      if (!this.filterKeyword) return this.services;
-      return this.services.filter(service => {
-        return this.categories.find(c => c.id === service.category_id).title.toLowerCase() == this.filterKeyword.toLowerCase();
+      if (!this.filterKeyword) return this.getServices;
+      return this.getServices.filter(service => {
+        return this.getCategories.find(c => c.id === service.category_id).title.toLowerCase() == this.filterKeyword.toLowerCase();
       })
     }
   },

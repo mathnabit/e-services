@@ -18,7 +18,7 @@
           <v-col>
             <v-autocomplete
               v-model="filterKeyword"
-              :items="categories"
+              :items="getCategories"
               item-text="title"
               item-value="id"
               label="Catégories"
@@ -88,7 +88,7 @@
                         <v-col>
                           <v-autocomplete
                             v-model="service.category_id"
-                            :items="categories"
+                            :items="getCategories"
                             item-text="title"
                             item-value="id"
                             label="Catégories*"
@@ -141,12 +141,13 @@
         <!-- Serivices cards -->
         <v-row dense>
           <v-col
-            v-for="service in searching"
+            v-for="service in paginateServices"
             :key="service.id"
           >
             <v-card
               class="mx-auto"
               max-width="270"
+              v-if="service"
             >
               <a :href="service.service_url" target="_blank">
                 <v-img
@@ -161,7 +162,7 @@
                   outlined
                   color="blue"
                 >
-                {{ categories.find(c => c.id === service.category_id).title }} 
+                {{ getCategories.find(c => c.id === service.category_id) ? getCategories.find(c => c.id === service.category_id).title : '' }} 
                 </v-chip>
               </v-card-subtitle>   
               <v-card-actions class="justify-center">
@@ -208,8 +209,9 @@
         <v-row>
           <v-col>
             <v-pagination
-              v-show="this.services.length >= 8"
-              :length="2"
+              v-model="page"
+              :length="pages"
+              @input="updatePage"
             ></v-pagination>
           </v-col>
         </v-row>
@@ -257,7 +259,7 @@
                   <v-col>
                     <v-autocomplete
                       v-model="service.category_id"
-                      :items="categories"
+                      :items="getCategories"
                       item-text="title"
                       item-value="id"
                       label="Catégories*"
@@ -361,14 +363,23 @@ export default {
         showDescription: false
       },
       photo: null,
+      // Using getServices and getCategories instead to trigger computed reactivity
       services: [],
-      categories: []
+      // categories: []
+      page: 1,
+      //pages: 0,
+      pageSize: 6,
+      servicesCount: 0
     } 
   },
   created() {
     console.log('created is here');
     this.allServices();
+    // .then(()=> {
+    //   this.initPage();
+    // });
     this.allCategories();
+    this.updatePage(this.page);
   },
   methods: {
     ...mapActions({
@@ -394,9 +405,13 @@ export default {
       });
       formData.append('service', payload);
 
-      this.addService(formData);
+      this.addService(formData)
+      .then(()=> {
+        this.updatePage(this.page);
+      })
       this.hasAdded = true;
       this.resetService();
+      
       
     },
     syncService(service) {
@@ -433,14 +448,34 @@ export default {
         showDescription: false
       };
       this.photo = null;
+    },
+    // initPage() {
+    //   console.log('hello from initPage 1');
+		// 	this.servicesCount = this.getServices.length;
+    //   console.log('hello from initPage 2'+this.servicesCount);
+		// 	if (this.servicesCount < this.pageSize) {
+		// 		return this.getServices;
+		// 	} else {
+		// 		return this.getServices.slice(0, this.pageSize);
+		// 	}
+		// },
+    updatePage(pageIndex) {
+      console.log('hello from updatePage');
+      let start = (pageIndex - 1) * this.pageSize;
+			let end = pageIndex * this.pageSize;
+			this.page = pageIndex;
+      return this.searching.slice(start, end);
     }
   },
   computed: {
     getServices() {
+      console.log('je suis getServices');
       this.services = this.$store.getters.getServices;
+      return this.$store.getters.getServices;
     },
     getCategories() {
-      this.categories = this.$store.getters.getCategories;
+      //this.categories = this.$store.getters.getCategories;
+      return this.$store.getters.getCategories;
     },
     keywords() {
       if (!this.search) return []
@@ -459,11 +494,21 @@ export default {
       });
     },
     filtering() {
-      if (!this.filterKeyword) return this.services;
-      return this.services.filter(service => {
-        return this.categories.find(c => c.id === service.category_id).title.toLowerCase() == this.filterKeyword.toLowerCase();
+      if (!this.filterKeyword) return this.getServices;
+      return this.getServices.filter(service => {
+        return this.getCategories.find(c => c.id === service.category_id).id == this.filterKeyword;
       })
-    }
+    },
+    pages() {
+      console.log('hello from pages');
+      this.servicesCount = this.searching.length;
+			if (this.pageSize == null || this.servicesCount == null) return 0;
+			return Math.ceil(this.servicesCount / this.pageSize);
+		},
+    paginateServices() {
+      console.log('hello from paginateServices');
+      return this.updatePage(this.page);
+    } 
   },
 }
 </script>

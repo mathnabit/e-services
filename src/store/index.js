@@ -32,11 +32,17 @@ export default new Vuex.Store({
     getServices(state) {
       return state.services;
     },
+    countServices(state) {
+      return state.services.length;
+    },
 
     /* ------ Categories -----*/
     getCategories(state) {
       return state.categories;
-    }
+    },
+    countCategories(state) {
+      return state.categories.length;
+    },
   },
   mutations: {
     /* ------ Auth -----*/
@@ -98,7 +104,7 @@ export default new Vuex.Store({
         console.log(response.data.token);
         dispatch('attempt', response.data.token)
         .then(()=>{
-          router.push('Dashboard/');
+          router.push('Dashboard/services');
           // stockage du token 
           localStorage.setItem('token', response.data.token);
         });

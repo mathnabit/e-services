@@ -24,7 +24,7 @@
                 <v-icon>mdi-phone-in-talk-outline</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
-                <v-list-item-title>+212 655952133</v-list-item-title>
+                <v-list-item-title>+212 644951266</v-list-item-title>
                 <v-list-item-subtitle>Téléphone</v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
@@ -34,7 +34,7 @@
                 <v-icon>mdi-email-fast-outline</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
-                <v-list-item-title>contact@eservices.ma</v-list-item-title>
+                <v-list-item-title>contact@smart.ma</v-list-item-title>
                 <v-list-item-subtitle>Email</v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
@@ -64,7 +64,7 @@
           </h2>
           <v-expansion-panels accordion>
             <v-expansion-panel>
-              <v-expansion-panel-header>C'est quoi E-Services ?</v-expansion-panel-header>
+              <v-expansion-panel-header>C'est quoi Smart Kiosk ?</v-expansion-panel-header>
               <v-expansion-panel-content>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
                 aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.

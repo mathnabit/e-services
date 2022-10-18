@@ -368,7 +368,7 @@ export default {
       // categories: []
       page: 1,
       //pages: 0,
-      pageSize: 6,
+      pageSize: 8,
       servicesCount: 0
     } 
   },

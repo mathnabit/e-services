@@ -5,7 +5,7 @@
         <v-col cols="6" class="blue lighten-1" style="border-bottom-right-radius: 300px; height: 720px">
           <!-- <v-main class="mt-0 p-6">  -->
             <v-card-text class="white--text" >
-              <h2 class="text-center">Bienvenu chez AGSA SERVICES :)</h2>
+              <h2 class="text-center">Bienvenu chez SMART KIOSK !</h2>
               <h4 class="text-center pt-4">
                 Notre plateforme contient un ensemble de services à fournir<br>  Exploitez vous !
               </h4>
@@ -24,8 +24,8 @@
             <v-img 
               class="mx-auto"
               alt="Vuetify Logo"
-              src="@/assets/logo.png"
-              width="100px"
+              src="@/assets/smartkiosk.png"
+              width="200px"
               height="100px"
             />              
             <v-card width="400" class="mx-auto mt-0" elevation="0">

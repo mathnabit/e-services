@@ -9,7 +9,7 @@
               <v-badge
                 bordered
                 color="green darken-2"
-                content="44"
+                :content="countServices"
                 overlap
               >
                 <v-icon
@@ -36,7 +36,7 @@
               <v-badge
                 bordered
                 color="blue darken-2"
-                content="15"
+                :content="countCategories"
                 overlap
               >
                 <v-icon
@@ -91,7 +91,15 @@
 
 <script>
 export default {
-
+computed: {
+  countServices() {
+    return this.$store.getters.countServices;
+  },
+  countCategories() {
+    return this.$store.getters.countCategories;
+  }
+  
+}
 }
 </script>
 
